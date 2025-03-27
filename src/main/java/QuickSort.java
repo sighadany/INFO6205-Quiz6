@@ -9,73 +9,46 @@ public class QuickSort {
 
     /**
      * Rearranges the array in ascending order, using the natural order.
-        @param a the array to be sorted
+     * @param a the array to be sorted
      */
-//    public static void sort(Comparable[] a) {
-//        Collections.shuffle(Arrays.asList(a));
-//        sort(a, 0, a.length - 1);
-//        assert isSorted(a);
-//    }
-
     public static void sort(Comparable[] a) {
-        Comparable[] aux = new Comparable[a.length];
-        sort(a, aux, 0, a.length);
+        Collections.shuffle(Arrays.asList(a));
+        sort(a, 0, a.length - 1);
         assert isSorted(a);
     }
 
-    private static void sort(Comparable[] a, Comparable[] aux, int from, int to) {
-        if (from >= to - 1) return;
-
-        int mid = from + (to - from ) / 2;
-
-        sort(a, aux, from, mid);
-
-        sort(a, aux, mid, to);
-
-        merge(a, aux, from, mid, to);
-    }
-
-    private static void merge(Comparable[] a, Comparable[] aux, int from, int mid, int to) {
-        for(int k = from; k < to; k++) {
-            aux[k] = a[k];
-        }
-
-        int i = from;
-        int j = mid;
-
-        for(int k = from; k < to; k++) {
-            if(j >= to) {
-                a[k] = aux[i++];
-            } else if( i >= mid) {
-                a[k] = aux[j++];
-            } else if(less(aux[j], aux[i])) {
-                a[k] = aux[j++];
-            } else {
-                a[k] = aux[i++];
-            }
-        }
-
-    }
-
     // quicksort the subarray from a[lo] to a[hi]
-//    private static void sort(Comparable[] a, int lo, int hi) {
-//        if (hi <= lo) return;
-//       //Student TODO
-//    }
+    private static void sort(Comparable[] a, int lo, int hi) {
+        if (hi <= lo) return;
+        int j = partition(a, lo, hi);
+        sort(a, lo, j - 1);
+        sort(a, j + 1, hi);
+    }
 
     // partition the subarray a[lo..hi] so that a[lo..j-1] <= a[j] <= a[j+1..hi]
     // and return the index j.
-//    private static int partition(Comparable[] a, int lo, int hi) {
-//        //Student TODO
-//    }
+    private static int partition(Comparable[] a, int lo, int hi) {
+        Comparable pivot = a[lo];
+        int i = lo;
+        int j = hi + 1;
 
-    
+        while (true) {
+            while (less(a[++i], pivot)) {
+                if (i == hi) break;
+            }
+            while (less(pivot, a[--j])) {
+                if (j == lo) break;
+            }
+            if (i >= j) break;
+            exch(a, i, j);
+        }
+        exch(a, lo, j);
+        return j;
+    }
 
-
-
-   /***************************************************************************
-    *  Helper sorting functions.
-    ***************************************************************************/
+    /***************************************************************************
+     *  Helper sorting functions.
+     ***************************************************************************/
 
     // is v < w ?
     private static boolean less(Comparable v, Comparable w) {
@@ -90,10 +63,9 @@ public class QuickSort {
         a[j] = swap;
     }
 
-
-   /***************************************************************************
-    *  Check if array is sorted - useful for debugging.
-    ***************************************************************************/
+    /***************************************************************************
+     *  Check if array is sorted - useful for debugging.
+     ***************************************************************************/
     private static boolean isSorted(Comparable[] a) {
         return isSorted(a, 0, a.length - 1);
     }
@@ -103,7 +75,6 @@ public class QuickSort {
             if (less(a[i], a[i-1])) return false;
         return true;
     }
-
 
     // print array to standard output
     private static void show(Comparable[] a) {
@@ -127,5 +98,4 @@ public class QuickSort {
         show(a);
         assert isSorted(a);
     }
-
 }
