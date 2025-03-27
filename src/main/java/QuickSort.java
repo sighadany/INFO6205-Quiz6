@@ -11,23 +11,63 @@ public class QuickSort {
      * Rearranges the array in ascending order, using the natural order.
         @param a the array to be sorted
      */
+//    public static void sort(Comparable[] a) {
+//        Collections.shuffle(Arrays.asList(a));
+//        sort(a, 0, a.length - 1);
+//        assert isSorted(a);
+//    }
+
     public static void sort(Comparable[] a) {
-        Collections.shuffle(Arrays.asList(a));
-        sort(a, 0, a.length - 1);
+        Comparable[] aux = new Comparable[a.length];
+        sort(a, aux, 0, a.length);
         assert isSorted(a);
     }
 
-    // quicksort the subarray from a[lo] to a[hi]
-    private static void sort(Comparable[] a, int lo, int hi) {
-        if (hi <= lo) return;
-       //Student TODO
+    private static void sort(Comparable[] a, Comparable[] aux, int from, int to) {
+        if (from >= to - 1) return;
+
+        int mid = from + (to - from ) / 2;
+
+        sort(a, aux, from, mid);
+
+        sort(a, aux, mid, to);
+
+        merge(a, aux, from, mid, to);
     }
+
+    private static void merge(Comparable[] a, Comparable[] aux, int from, int mid, int to) {
+        for(int k = from; k < to; k++) {
+            aux[k] = a[k];
+        }
+
+        int i = from;
+        int j = mid;
+
+        for(int k = from; k < to; k++) {
+            if(j >= to) {
+                a[k] = aux[i++];
+            } else if( i >= mid) {
+                a[k] = aux[j++];
+            } else if(less(aux[j], aux[i])) {
+                a[k] = aux[j++];
+            } else {
+                a[k] = aux[i++];
+            }
+        }
+
+    }
+
+    // quicksort the subarray from a[lo] to a[hi]
+//    private static void sort(Comparable[] a, int lo, int hi) {
+//        if (hi <= lo) return;
+//       //Student TODO
+//    }
 
     // partition the subarray a[lo..hi] so that a[lo..j-1] <= a[j] <= a[j+1..hi]
     // and return the index j.
-    private static int partition(Comparable[] a, int lo, int hi) {
-        //Student TODO
-    }
+//    private static int partition(Comparable[] a, int lo, int hi) {
+//        //Student TODO
+//    }
 
     
 
